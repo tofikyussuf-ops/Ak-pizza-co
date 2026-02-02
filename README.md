@@ -1,4 +1,4 @@
-# 🍕 Ak Pizza Co.
+# 🍕 Ak Pizza 
 
 A modern, fast, and responsive pizza ordering application built with **React**, **Redux Toolkit**, and **Tailwind CSS**.
 
