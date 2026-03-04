@@ -6,7 +6,12 @@ function Username() {
   if (!username) return null;
 
   return (
-    <div className="hidden text-sm font-semibold md:block">{username}</div>
+    // Added a subtle tracking-wide and shifted to a slightly softer stone color
+    // Added a fade-in animation so it doesn't just "pop" when the user logs in
+    <div className="hidden animate-fade-in text-sm font-bold tracking-tight text-stone-700 md:block lg:text-base">
+      <span className="text-stone-400 font-medium">Hello, </span>
+      {username}
+    </div>
   );
 }
 
