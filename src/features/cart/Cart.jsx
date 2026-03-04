@@ -13,18 +13,22 @@ function Cart() {
   if (!cart.length) return <EmptyCart />;
 
   return (
-    <div className="px-4 py-3">
-      <LinkButton to="/menu">&larr; Back to menu</LinkButton>
+    // Added animate-fade-in for a smooth entrance
+    <div className="animate-fade-in px-4 py-3 sm:px-6">
+      <LinkButton to="/menu">Back to menu</LinkButton>
 
-      <h2 className="mt-7 text-xl font-semibold">Your cart, {username}</h2>
+      <h2 className="mt-7 text-xl font-semibold text-stone-800">
+        Your cart, <span className="text-yellow-600">{username}</span>
+      </h2>
 
-      <ul className="mt-3 divide-y divide-stone-200 border-b">
+      {/* Modernized list with slightly more breathing room */}
+      <ul className="mt-4 divide-y divide-stone-200 border-b border-stone-200">
         {cart.map((item) => (
           <CartItem item={item} key={item.pizzaId} />
         ))}
       </ul>
 
-      <div className="mt-6 space-x-2">
+      <div className="mt-8 flex items-center gap-3 sm:gap-4">
         <Button to="/order/new" type="primary">
           Order pizzas
         </Button>

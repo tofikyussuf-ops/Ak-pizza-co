@@ -2,12 +2,15 @@ import { Link, useNavigate } from 'react-router-dom';
 
 function LinkButton({ children, to }) {
   const navigate = useNavigate();
-  const className = 'text-sm text-blue-500 hover:text-blue-600 hover:underline';
+  
+  // Modernized: Swapped blue for stone/yellow palette to match your branding
+  // Added transition-all for a smoother hover effect
+  const className = 'text-sm text-stone-500 hover:text-stone-800 transition-all duration-300 hover:underline';
 
   if (to === '-1')
     return (
       <button className={className} onClick={() => navigate(-1)}>
-        {children}
+        &larr; {children}
       </button>
     );
 
