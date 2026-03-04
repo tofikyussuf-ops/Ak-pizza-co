@@ -7,7 +7,6 @@ import { addItem, getCurrentQuantityById } from '../cart/cartSlice';
 
 function MenuItem({ pizza }) {
   const dispatch = useDispatch();
-
   const { id, name, unitPrice, ingredients, soldOut, imageUrl } = pizza;
 
   const currentQuantity = useSelector(getCurrentQuantityById(id));
@@ -25,28 +24,36 @@ function MenuItem({ pizza }) {
   }
 
   return (
-    <li className="flex gap-4 py-2">
-      <img
-        src={imageUrl}
-        alt={name}
-        className={`h-24 ${soldOut ? 'opacity-70 grayscale' : ''}`}
-      />
+    <li className="flex gap-4 py-3 transition-all duration-300 hover:bg-stone-50/50 px-2 rounded-lg group">
+      <div className="relative overflow-hidden rounded-md">
+        <img
+          src={imageUrl}
+          alt={name}
+          className={`h-24 w-24 object-cover transition-transform duration-500 group-hover:scale-105 ${
+            soldOut ? 'opacity-60 grayscale' : ''
+          }`}
+        />
+      </div>
+
       <div className="flex grow flex-col pt-0.5">
-        <p className="font-medium">{name}</p>
-        <p className="text-sm capitalize italic text-stone-500">
+        <p className="font-bold text-stone-800">{name}</p>
+        <p className="text-sm capitalize italic text-stone-500 line-clamp-2">
           {ingredients.join(', ')}
         </p>
+        
         <div className="mt-auto flex items-center justify-between">
           {!soldOut ? (
-            <p className="text-sm">{formatCurrency(unitPrice)}</p>
+            <p className="text-sm font-semibold text-stone-600">
+              {formatCurrency(unitPrice)}
+            </p>
           ) : (
-            <p className="text-sm font-medium uppercase text-stone-500">
+            <p className="text-xs font-bold uppercase tracking-wider text-stone-400">
               Sold out
             </p>
           )}
 
           {isInCart && (
-            <div className="flex items-center gap-3 sm:gap-8">
+            <div className="flex items-center gap-3 sm:gap-8 animate-fade-in">
               <UpdateItemQuantity
                 pizzaId={id}
                 currentQuantity={currentQuantity}
