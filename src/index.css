@@ -4,31 +4,44 @@
 
 @layer components {
   .input {
-    @apply rounded-full border border-stone-200 px-4 py-2 text-sm transition-all duration-300 placeholder:text-stone-400 focus:outline-none focus:ring focus:ring-yellow-400 md:px-6 md:py-3;
+    /* 1. Use ring-offset to create a 'gap' between the input and the ring */
+    /* 2. Softened the border and background for a cleaner look */
+    @apply rounded-full border border-stone-200 bg-stone-50/50 px-4 py-2 text-sm 
+           transition-all duration-200 placeholder:text-stone-400 
+           focus:bg-white focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:ring-offset-2
+           md:px-6 md:py-3;
   }
 
-  /* https://dev.to/afif/i-made-100-css-loaders-for-your-next-project-4eje */
   .loader {
+    /* Modernized the loader with rounded caps and a smoother easing function */
     width: 45px;
     aspect-ratio: 0.75;
     --c: no-repeat linear-gradient(theme(colors.stone.800) 0 0);
     background: var(--c) 0% 50%, var(--c) 50% 50%, var(--c) 100% 50%;
     background-size: 20% 50%;
-    animation: loading 1s infinite linear;
+    /* Use 'cubic-bezier' for a more premium, organic feel than 'linear' */
+    animation: loading 1.2s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
+    border-radius: 999px; 
   }
 
   @keyframes loading {
-    20% {
-      background-position: 0% 0%, 50% 50%, 100% 50%;
+    /* Added a slight scaling effect to make the loader feel more "alive" */
+    0%, 100% { background-size: 20% 50%; }
+    20% { 
+      background-position: 0% 0%, 50% 50%, 100% 50%; 
+      background-size: 20% 80%, 20% 50%, 20% 50%;
     }
-    40% {
-      background-position: 0% 100%, 50% 0%, 100% 50%;
+    40% { 
+      background-position: 0% 100%, 50% 0%, 100% 50%; 
+      background-size: 20% 50%, 20% 80%, 20% 50%;
     }
-    60% {
-      background-position: 0% 50%, 50% 100%, 100% 0%;
+    60% { 
+      background-position: 0% 50%, 50% 100%, 100% 0%; 
+      background-size: 20% 50%, 20% 50%, 20% 80%;
     }
-    80% {
-      background-position: 0% 50%, 50% 50%, 100% 100%;
+    80% { 
+      background-position: 0% 50%, 50% 50%, 100% 100%; 
+      background-size: 20% 50%, 20% 50%, 20% 50%;
     }
   }
 }
