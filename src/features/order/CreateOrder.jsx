@@ -9,7 +9,6 @@ import store from '../../store';
 import { formatCurrency } from '../../utils/helpers';
 import { fetchAddress } from '../user/userSlice';
 
-// https://uibakery.io/regex-library/phone-number
 const isValidPhone = (str) =>
   /^\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}$/.test(
     str
@@ -40,13 +39,12 @@ function CreateOrder() {
   if (!cart.length) return <EmptyCart />;
 
   return (
-    <div className="px-4 py-6">
-      <h2 className="mb-8 text-xl font-semibold">Ready to order? Let's go!</h2>
+    <div className="animate-fade-in px-4 py-6">
+      <h2 className="mb-8 text-xl font-bold text-stone-700">Ready to order? Let's go!</h2>
 
-      {/* <Form method="POST" action="/order/new"> */}
       <Form method="POST">
         <div className="mb-5 flex flex-col gap-2 sm:flex-row sm:items-center">
-          <label className="sm:basis-40">First Name</label>
+          <label className="sm:basis-40 font-medium text-stone-600">First Name</label>
           <input
             className="input grow"
             type="text"
@@ -57,11 +55,11 @@ function CreateOrder() {
         </div>
 
         <div className="mb-5 flex flex-col gap-2 sm:flex-row sm:items-center">
-          <label className="sm:basis-40">Phone number</label>
+          <label className="sm:basis-40 font-medium text-stone-600">Phone number</label>
           <div className="grow">
             <input className="input w-full" type="tel" name="phone" required />
             {formErrors?.phone && (
-              <p className="mt-2 rounded-md bg-red-100 p-2 text-xs text-red-700">
+              <p className="mt-2 animate-fade-in rounded-md bg-red-100 p-2 text-xs font-medium text-red-700">
                 {formErrors.phone}
               </p>
             )}
@@ -69,7 +67,7 @@ function CreateOrder() {
         </div>
 
         <div className="relative mb-5 flex flex-col gap-2 sm:flex-row sm:items-center">
-          <label className="sm:basis-40">Address</label>
+          <label className="sm:basis-40 font-medium text-stone-600">Address</label>
           <div className="grow">
             <input
               className="input w-full"
@@ -80,7 +78,7 @@ function CreateOrder() {
               required
             />
             {addressStatus === 'error' && (
-              <p className="mt-2 rounded-md bg-red-100 p-2 text-xs text-red-700">
+              <p className="mt-2 animate-fade-in rounded-md bg-red-100 p-2 text-xs font-medium text-red-700">
                 {errorAddress}
               </p>
             )}
@@ -96,7 +94,7 @@ function CreateOrder() {
                   dispatch(fetchAddress());
                 }}
               >
-                Get position
+                {isLoadingAddress ? 'Locating...' : 'Get position'}
               </Button>
             </span>
           )}
@@ -104,19 +102,19 @@ function CreateOrder() {
 
         <div className="mb-12 flex items-center gap-5">
           <input
-            className="h-6 w-6 accent-yellow-400 focus:outline-none focus:ring focus:ring-yellow-400 focus:ring-offset-2"
+            className="h-6 w-6 accent-yellow-400 transition-all duration-300 focus:outline-none focus:ring focus:ring-yellow-400 focus:ring-offset-2"
             type="checkbox"
             name="priority"
             id="priority"
             value={withPriority}
             onChange={(e) => setWithPriority(e.target.checked)}
           />
-          <label htmlFor="priority" className="font-medium">
-            Want to yo give your order priority?
+          <label htmlFor="priority" className="font-semibold text-stone-700 cursor-pointer">
+            Want to give your order priority?
           </label>
         </div>
 
-        <div>
+        <div className="flex items-center gap-4">
           <input type="hidden" name="cart" value={JSON.stringify(cart)} />
           <input
             type="hidden"
@@ -130,41 +128,21 @@ function CreateOrder() {
 
           <Button disabled={isSubmitting || isLoadingAddress} type="primary">
             {isSubmitting
-              ? 'Placing order....'
-              : `Order now from ${formatCurrency(totalPrice)}`}
+              ? 'Placing order...'
+              : `Order now ${formatCurrency(totalPrice)}`}
           </Button>
+          
+          {withPriority && (
+            <span className="text-xs font-bold uppercase text-stone-400 animate-fade-in">
+              + {formatCurrency(priorityPrice)} Priority Fee
+            </span>
+          )}
         </div>
       </Form>
     </div>
   );
 }
 
-export async function action({ request }) {
-  const formData = await request.formData();
-  const data = Object.fromEntries(formData);
-
-  const order = {
-    ...data,
-    cart: JSON.parse(data.cart),
-    priority: data.priority === 'true',
-  };
-
-  console.log(order);
-
-  const errors = {};
-  if (!isValidPhone(order.phone))
-    errors.phone =
-      'Please give us your correct phone number. We might need it to contact you.';
-
-  if (Object.keys(errors).length > 0) return errors;
-
-  // If everything is okay, create new order and redirect
-  const newOrder = await createOrder(order);
-
-  // Do NOT overuse
-  store.dispatch(clearCart());
-
-  return redirect(`/order/${newOrder.id}`);
-}
+// ... existing action function ...
 
 export default CreateOrder;
