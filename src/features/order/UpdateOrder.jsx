@@ -4,10 +4,16 @@ import { updateOrder } from '../../services/apiRestaurant';
 
 function UpdateOrder({ order }) {
   const fetcher = useFetcher();
+  
+  // Modern UI: Check if the form is currently being submitted
+  const isUpdating = fetcher.state === 'submitting';
 
   return (
-    <fetcher.Form method="PATCH" className="text-right">
-      <Button type="primary">Make priority</Button>
+    /* Added animate-fade-in to match the rest of the Order page */
+    <fetcher.Form method="PATCH" className="text-right animate-fade-in">
+      <Button type="primary" disabled={isUpdating}>
+        {isUpdating ? 'Updating Priority...' : 'Make priority'}
+      </Button>
     </fetcher.Form>
   );
 }
@@ -15,6 +21,7 @@ function UpdateOrder({ order }) {
 export default UpdateOrder;
 
 export async function action({ request, params }) {
+  // The data being sent to the API
   const data = { priority: true };
   await updateOrder(params.orderId, data);
   return null;
