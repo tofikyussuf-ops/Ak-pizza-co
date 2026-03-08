@@ -26,7 +26,9 @@ const router = createBrowserRouter([
         path: '/menu',
         element: <Menu />,
         loader: menuLoader,
-        errorElement: <Error />,
+        /* This local errorElement ensures the Header/Footer stay visible 
+           even if the API call for the menu fails! */
+        errorElement: <Error />, 
       },
       { path: '/cart', element: <Cart /> },
       {
